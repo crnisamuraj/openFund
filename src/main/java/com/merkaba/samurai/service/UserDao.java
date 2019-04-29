@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.merkaba.samurai.model.UserModel;
+import com.merkaba.samurai.resource.UserResource;
 
 @Component
 public class UserDao {
@@ -20,8 +21,13 @@ public class UserDao {
 		users.add(new UserModel(3, "sub-zero", "sub", "zero"));
 	}
 	
-	public List<UserModel> findAll() {
-		return users;
+	public List<UserResource> findAll() {
+		List<UserResource> resources = new ArrayList<UserResource>();
+		for (UserModel user:users) {
+			UserResource rsc = new UserResource(user);
+			resources.add(rsc);
+		}
+		return resources;
 	}
 	
 	public UserModel add(UserModel user) {

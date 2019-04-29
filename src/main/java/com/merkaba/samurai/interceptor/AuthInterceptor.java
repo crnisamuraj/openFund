@@ -1,7 +1,7 @@
 package com.merkaba.samurai.interceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpSession;
 
 public class AuthInterceptor {
 	/*

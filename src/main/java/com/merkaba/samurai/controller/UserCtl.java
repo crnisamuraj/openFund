@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.merkaba.samurai.model.UserModel;
+import com.merkaba.samurai.resource.UserResource;
 import com.merkaba.samurai.service.UserDao;
 import com.merkaba.samurai.util.exception.UserNotFoundException;
 
@@ -27,9 +29,11 @@ public class UserCtl {
 	
 
 	@RequestMapping(method=RequestMethod.GET, produces="application/json")
-	public ResponseEntity<?> getAllUsers() {
-		List<UserModel> users = userService.findAll();
-		return ResponseEntity.ok(users);
+	public ResponseEntity<?> getAllUsers() {		
+		List<UserResource> resources = userService.findAll();
+		if (resources.isEmpty())
+			throw new UserNotFoundException("No users found");
+		return new ResponseEntity<>(resources, HttpStatus.OK);
 	}
 
 	@RequestMapping(method=RequestMethod.GET, path="/{user_id}", produces="application/json")
@@ -37,7 +41,8 @@ public class UserCtl {
 		UserModel user = userService.find(user_id);
 		if(user == null)
 			throw new UserNotFoundException("id: " + user_id);
-		return ResponseEntity.ok(user);
+		UserResource resource = new UserResource(user);
+		return new ResponseEntity<>(resource, HttpStatus.OK);
 	}	
 
 	
@@ -46,7 +51,8 @@ public class UserCtl {
 		UserModel user = userService.remove(user_id);
 		if (user == null)
 			throw new UserNotFoundException("id: " + user_id);
-		return ResponseEntity.ok(user);
+		UserResource resource = new UserResource(user);
+		return ResponseEntity.ok(resource);
 	}
 	
 	
@@ -57,13 +63,19 @@ public class UserCtl {
 				.fromCurrentRequest()
 				.path("/{id}")
 				.buildAndExpand(savedUser.getId()).toUri();
-		return ResponseEntity.created(location).build();
+		UserResource resource = new UserResource(user);
+		return ResponseEntity.created(location).body(resource);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT, path="/{user_id}", produces="application/json")
 	public ResponseEntity<?> updateUser(@PathVariable Integer user_id, UserModel user) {
 		user = userService.update(user_id, user);
-		return ResponseEntity.ok(user);
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(user.getId()).toUri();
+		UserResource resource = new UserResource(user);
+		return ResponseEntity.created(location).body(resource);
 	}
 	
 
