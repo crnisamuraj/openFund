@@ -3,6 +3,8 @@ package com.merkaba.samurai.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,9 +51,12 @@ public class UserCtl {
 	
 	
 	@RequestMapping(method=RequestMethod.POST, produces="application/json")
-	public ResponseEntity<?> addUser(@RequestBody UserModel user) {
+	public ResponseEntity<?> addUser(@Valid @RequestBody UserModel user) {
 		UserModel savedUser = userService.add(user);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId()).toUri();
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(savedUser.getId()).toUri();
 		return ResponseEntity.created(location).build();
 	}
 	
