@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.merkaba.samurai.model.UserModel;
+import com.merkaba.samurai.resource.UserResource;
 import com.merkaba.samurai.service.UserDao;
 
 @RestController
@@ -37,7 +37,7 @@ public class TestCtl {
 	
 	@RequestMapping(method=RequestMethod.GET, path="/filtering", produces="application/json")
 	public ResponseEntity<MappingJacksonValue> filtering() {
-		List<UserModel> users = userService.findAll();
+		List<UserResource> users = userService.findAll();
 		
 		SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("userName", "password");
 		FilterProvider filters = new SimpleFilterProvider().addFilter("filter", filter);

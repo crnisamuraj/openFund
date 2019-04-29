@@ -1,5 +1,6 @@
 package com.merkaba.samurai.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +21,14 @@ public class UserDao {
 	UserRepository userRepository;
 	
 		
-	public List<UserModel> findAll() {
-		return userRepository.findAll();
+	public List<UserResource> findAll() {
+		List<UserModel> users = userRepository.findAll();
+		List<UserResource> resources = new ArrayList<UserResource>();
+		for(UserModel user:users) {
+			UserResource resource = new UserResource(user);
+			resources.add(resource);
+		}
+		return resources;
 	}
 	
 	public UserResource add(UserModel user) {
@@ -47,10 +54,11 @@ public class UserDao {
 		return "User with id: " + id + "deleted." ;
 	}
 	
-	public UserModel update (Integer id, UserModel userUpdate) {
+	public UserResource update (Integer id, UserModel userUpdate) {
 		UserModel userU = userUpdate;
 		userU.setId(id);
-		return userRepository.save(userU);
+		UserResource resource = new UserResource(userRepository.save(userU));
+		return resource;
 	}
 
 }

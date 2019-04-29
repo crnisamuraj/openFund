@@ -30,7 +30,7 @@ public class UserCtl {
 
 	@RequestMapping(method=RequestMethod.GET, produces="application/json")
 	public ResponseEntity<?> getAllUsers() {		
-		List<UserModel> users = userService.findAll();
+		List<UserResource> users = userService.findAll();
 		if (users.isEmpty())
 			throw new UserNotFoundException("No users found");
 		return new ResponseEntity<>(users, HttpStatus.OK);
@@ -52,22 +52,22 @@ public class UserCtl {
 	
 	@RequestMapping(method=RequestMethod.POST, produces="application/json")
 	public ResponseEntity<?> addUser(@Valid @RequestBody UserModel user) {
-		UserResource savedUser = userService.add(user);
+		UserResource resource = userService.add(user);
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
-				.buildAndExpand(savedUser.getId()).toUri();
-		return ResponseEntity.created(location).body(user);
+				.buildAndExpand(resource.getId()).toUri();
+		return ResponseEntity.created(location).body(resource);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT, path="/{user_id}", produces="application/json")
 	public ResponseEntity<?> updateUser(@PathVariable Integer user_id, UserModel user) {
-		user = userService.update(user_id, user);
+		UserResource resource = userService.update(user_id, user);
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
 				.buildAndExpand(user.getId()).toUri();
-		return ResponseEntity.created(location).body(user);
+		return ResponseEntity.created(location).body(resource);
 	}
 	
 
