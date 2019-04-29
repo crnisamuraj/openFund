@@ -1,73 +1,56 @@
 package com.merkaba.samurai.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.stereotype.Component;
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.merkaba.samurai.model.UserModel;
 import com.merkaba.samurai.resource.UserResource;
+import com.merkaba.samurai.util.exception.UserNotFoundException;
 
-@Component
+@Repository
+@Transactional
 public class UserDao {
 	
-	private static int userCount = 3;
+	@Autowired
+	UserRepository userRepository;
 	
-	private static List<UserModel> users = new ArrayList<>();
-	
-	static {
-		users.add(new UserModel(1, "scorpion", "hanzo", "hatori"));
-		users.add(new UserModel(2, "samurai", "hasashi", "atari"));
-		users.add(new UserModel(3, "sub-zero", "sub", "zero"));
+		
+	public List<UserModel> findAll() {
+		return userRepository.findAll();
 	}
 	
-	public List<UserResource> findAll() {
-		List<UserResource> resources = new ArrayList<UserResource>();
-		for (UserModel user:users) {
-			UserResource rsc = new UserResource(user);
-			resources.add(rsc);
-		}
-		return resources;
+	public UserResource add(UserModel user) {
+		UserModel retVal = userRepository.save(user);
+		UserResource resource = new UserResource(retVal);
+		return resource;
 	}
 	
-	public UserModel add(UserModel user) {
-		if(user.getId()==null) {
-			user.setId(++userCount);
-		}
-		users.add(user);
-		return user;
+	public UserResource find(Integer id) {
+		Optional<UserModel> retVal = userRepository.findById(id);
+		if (retVal.isPresent()) {
+			UserResource resource = new UserResource(retVal.get());
+			return resource;
+		} else throw new UserNotFoundException("User with id: " + id + "not found");
 	}
 	
-	public UserModel find(Integer id) {
-		for (UserModel user:users) {
-			if (user.getId()==id) {
-				return user;
+	public String remove (Integer id) {
+		try {
+			userRepository.deleteById(id);
+			} catch (Exception e) {
+				throw new UserNotFoundException("id: " + id + "not found");
 			}
-		}
-		return null;
-	}
-	
-	public UserModel remove (Integer id) {
-		UserModel user = this.find(id);
-		users.remove(user);
-		return user;
+		return "User with id: " + id + "deleted." ;
 	}
 	
 	public UserModel update (Integer id, UserModel userUpdate) {
-		UserModel user = this.find(id);
-		if (userUpdate.getUserName() != null) {
-			user.setUserName(userUpdate.getUserName());
-		}
-		if (userUpdate.getPassword() != null) {
-			user.setPassword(userUpdate.getPassword());
-		}
-		if (userUpdate.getFirstName() != null) {
-			user.setFirstName(userUpdate.getFirstName());
-		}
-		if (userUpdate.getLastName() != null) {
-			user.setLastName(userUpdate.getLastName());
-		}	
-		return user;
+		UserModel userU = userUpdate;
+		userU.setId(id);
+		return userRepository.save(userU);
 	}
 
 }

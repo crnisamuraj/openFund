@@ -2,8 +2,10 @@ package com.merkaba.samurai;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class SamuraiApplication {
 
 	public static void main(String[] args) {

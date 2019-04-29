@@ -30,41 +30,34 @@ public class UserCtl {
 
 	@RequestMapping(method=RequestMethod.GET, produces="application/json")
 	public ResponseEntity<?> getAllUsers() {		
-		List<UserResource> resources = userService.findAll();
-		if (resources.isEmpty())
+		List<UserModel> users = userService.findAll();
+		if (users.isEmpty())
 			throw new UserNotFoundException("No users found");
-		return new ResponseEntity<>(resources, HttpStatus.OK);
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
 	@RequestMapping(method=RequestMethod.GET, path="/{user_id}", produces="application/json")
 	public ResponseEntity<?> getUser(@PathVariable Integer user_id) {
-		UserModel user = userService.find(user_id);
-		if(user == null)
-			throw new UserNotFoundException("id: " + user_id);
-		UserResource resource = new UserResource(user);
+		UserResource resource = userService.find(user_id);
 		return new ResponseEntity<>(resource, HttpStatus.OK);
 	}	
 
 	
 	@RequestMapping(method=RequestMethod.DELETE, path="/{user_id}", produces="application/json")
 	public ResponseEntity<?> removeUser(@PathVariable Integer user_id) {
-		UserModel user = userService.remove(user_id);
-		if (user == null)
-			throw new UserNotFoundException("id: " + user_id);
-		UserResource resource = new UserResource(user);
-		return ResponseEntity.ok(resource);
+		String retVal = userService.remove(user_id);
+		return ResponseEntity.ok(retVal);
 	}
 	
 	
 	@RequestMapping(method=RequestMethod.POST, produces="application/json")
 	public ResponseEntity<?> addUser(@Valid @RequestBody UserModel user) {
-		UserModel savedUser = userService.add(user);
+		UserResource savedUser = userService.add(user);
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
 				.buildAndExpand(savedUser.getId()).toUri();
-		UserResource resource = new UserResource(user);
-		return ResponseEntity.created(location).body(resource);
+		return ResponseEntity.created(location).body(user);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT, path="/{user_id}", produces="application/json")
@@ -74,8 +67,7 @@ public class UserCtl {
 				.fromCurrentRequest()
 				.path("/{id}")
 				.buildAndExpand(user.getId()).toUri();
-		UserResource resource = new UserResource(user);
-		return ResponseEntity.created(location).body(resource);
+		return ResponseEntity.created(location).body(user);
 	}
 	
 
