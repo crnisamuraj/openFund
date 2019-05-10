@@ -4,11 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class UserNotFoundException extends RuntimeException {
+public class CustomException extends RuntimeException {
 
 	private static final long serialVersionUID = 4831587330745537140L;
 
-	public UserNotFoundException(String message) {
+	public CustomException(String message) {
 		super(message);
 	}
 }

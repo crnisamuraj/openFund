@@ -26,8 +26,8 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.I_AM_A_TEAPOT);
 	}
 	
-	@ExceptionHandler(UserNotFoundException.class)
-	public final ResponseEntity<Object> handleUserNotFoundException (UserNotFoundException ex, WebRequest request) {
+	@ExceptionHandler(CustomException.class)
+	public final ResponseEntity<Object> handleCustomException (CustomException ex, WebRequest request) {
 		
 		ExceptionResponse exceptionResponse =
 				new ExceptionResponse(new Date(), ex.getMessage(),
