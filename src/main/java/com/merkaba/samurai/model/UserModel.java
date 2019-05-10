@@ -1,11 +1,13 @@
 package com.merkaba.samurai.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -36,6 +38,9 @@ public class UserModel {
 	private String firstName;
 	
 	private String lastName;
+
+	@OneToMany(mappedBy = "owner")
+	private List<ProjectModel> projects;
 
 	@Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
@@ -125,10 +130,20 @@ public class UserModel {
 		this.modifiedAt = modifiedAt;
 	}
 
+
+	public List<ProjectModel> getProjects() {
+		return this.projects;
+	}
+
+	public void setProjects(List<ProjectModel> projects) {
+		this.projects = projects;
+	}
+
 	@Override
 	public String toString() {
-		return "UserModel [id=" + id + ", userName=" + userName + ", password=" + password + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", creationDate=" + creationDate + ", modifiedAt=" + modifiedAt + "]";
+		return "UserModel [creationDate=" + creationDate + ", firstName=" + firstName + ", id=" + id + ", lastName="
+				+ lastName + ", modifiedAt=" + modifiedAt + ", password=" + password + ", projects=" + projects
+				+ ", userName=" + userName + "]";
 	}
 
 	
