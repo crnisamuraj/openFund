@@ -8,7 +8,24 @@ public class CustomException extends RuntimeException {
 
 	private static final long serialVersionUID = 4831587330745537140L;
 
-	public CustomException(String message) {
+	private HttpStatus hStatus;
+
+	public CustomException(String message, HttpStatus hStatus) {
 		super(message);
+		this.hStatus = hStatus;
+	}
+
+	/**
+	 * @return the hStatus
+	 */
+	public HttpStatus gethStatus() {
+		return hStatus;
+	}
+
+	/**
+	 * @param hStatus the hStatus to set
+	 */
+	public void sethStatus(HttpStatus hStatus) {
+		this.hStatus = hStatus;
 	}
 }

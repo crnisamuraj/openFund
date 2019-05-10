@@ -18,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.merkaba.samurai.model.UserModel;
 import com.merkaba.samurai.resource.UserResource;
 import com.merkaba.samurai.service.UserDao;
-import com.merkaba.samurai.util.exception.CustomException;
 
 @RestController
 @RequestMapping("/user")
@@ -31,8 +30,6 @@ public class UserCtl {
 	@RequestMapping(method=RequestMethod.GET, produces="application/json")
 	public ResponseEntity<?> getAllUsers() {		
 		List<UserResource> users = userService.findAll();
-		if (users.isEmpty())
-			throw new CustomException("No users found");
 		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
