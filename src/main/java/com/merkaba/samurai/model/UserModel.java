@@ -42,6 +42,9 @@ public class UserModel {
 	@OneToMany(mappedBy = "owner")
 	private List<ProjectModel> projects;
 
+	@OneToMany(mappedBy = "user")
+	private List<DonationModel> donations;
+
 	@Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
 	private Date creationDate;
