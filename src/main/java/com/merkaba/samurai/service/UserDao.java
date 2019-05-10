@@ -35,14 +35,13 @@ public class UserDao {
 	}
 	
 	public UserResource add(UserModel user) {
-		UserModel retVal = new UserModel();
 		try {
-			retVal = userRepository.save(user);
+			UserModel retVal = userRepository.save(user);
+			UserResource resource = new UserResource(retVal);
+			return resource;
 		} catch (Exception e) {
 			throw new CustomException("Something went wrong with adding user, check all fields and try again", HttpStatus.BAD_REQUEST);
 		}
-		UserResource resource = new UserResource(retVal);
-		return resource;
 	}
 	
 	public UserResource find(Integer id) {
@@ -62,11 +61,14 @@ public class UserDao {
 		return "User with id: " + id + "deleted." ;
 	}
 	
-	public UserResource update (Integer id, UserModel userUpdate) {
-		UserModel userU = userUpdate;
-		userU.setId(id);
-		UserResource resource = new UserResource(userRepository.save(userU));
-		return resource;
+	public UserResource update (Integer id, UserModel userU) {
+		try {
+			userU.setId(id);
+			UserResource resource = new UserResource(userRepository.save(userU));
+			return resource;
+		} catch (Exception e) {
+			throw new CustomException(e.getMessage().toString(), HttpStatus.NOT_MODIFIED);
+		}
 	}
 
 }

@@ -57,6 +57,15 @@ public class ProjectModel {
         this.endDate = endDate;
     }
 
+    public ProjectModel(ProjectModel project) {
+
+        this.id = project.id;
+        this.name = project.name;
+        this.description = project.description;
+        this.owner = project.owner;
+        this.endDate = project.endDate;
+    }
+
 
 
     /**
