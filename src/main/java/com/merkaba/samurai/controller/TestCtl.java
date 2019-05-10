@@ -44,7 +44,7 @@ public class TestCtl {
 		
 		MappingJacksonValue mapping = new MappingJacksonValue(users);
 		mapping.setFilters(filters);
-		//TODO add @JsonFilter("filter") to UserModel to enable this filter
+		// add @JsonFilter("filter") to UserModel to enable this filter
 		return new ResponseEntity<MappingJacksonValue>(mapping, HttpStatus.OK);
 	}
 

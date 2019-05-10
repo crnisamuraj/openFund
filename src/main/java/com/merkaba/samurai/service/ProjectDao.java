@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.merkaba.samurai.model.ProjectModel;
-import com.merkaba.samurai.model.UserModel;
 import com.merkaba.samurai.util.exception.CustomException;
 
 import org.springframework.beans.factory.annotation.Autowired;
