@@ -5,6 +5,12 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.merkaba.samurai.model.ProjectModel;
+import com.merkaba.samurai.model.UserModel;
+import com.merkaba.samurai.resource.UserResource;
+import com.merkaba.samurai.service.ProjectDao;
+import com.merkaba.samurai.service.UserDao;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.merkaba.samurai.model.UserModel;
-import com.merkaba.samurai.resource.UserResource;
-import com.merkaba.samurai.service.UserDao;
 
 @RestController
 @RequestMapping("/user")
@@ -25,6 +28,9 @@ public class UserCtl {
 	
 	@Autowired
 	private UserDao userService;
+
+	@Autowired
+	private ProjectDao projectService;
 	
 
 	@RequestMapping(method=RequestMethod.GET, produces="application/json")
@@ -65,6 +71,18 @@ public class UserCtl {
 				.path("/{id}")
 				.buildAndExpand(user.getId()).toUri();
 		return ResponseEntity.created(location).body(resource);
+	}
+
+	@RequestMapping(path="/{userId}/project", method=RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<?> getProjectsByUserId(@PathVariable Integer userId) {
+		List<ProjectModel> projects = projectService.getProjectsByUserId(userId);
+		return new ResponseEntity<>(projects, HttpStatus.OK);
+	}
+	
+	@RequestMapping(path = "/{userId}/project", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<?> addProject(@PathVariable Integer userId, ProjectModel project) {
+		ProjectModel retVal = projectService.add(userId, project);
+		return new ResponseEntity<>(retVal, HttpStatus.CREATED);
 	}
 	
 
