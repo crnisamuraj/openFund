@@ -1,6 +1,7 @@
 package com.merkaba.samurai.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,9 +64,26 @@ public class UserDao {
 	
 	public UserResource update (Integer id, UserModel userU) {
 		try {
-			userU.setId(id);
-			UserResource resource = new UserResource(userRepository.save(userU));
-			return resource;
+			Optional<UserModel> val = userRepository.findById(id);
+			if (val.isPresent()) {
+				UserModel user = val.get();
+				userU.setId(id);
+				if (userU.getUserName().isEmpty())
+					userU.setUserName(user.getUserName());
+				if (userU.getPassword().isEmpty())
+					userU.setPassword(user.getPassword());
+				if (userU.getFirstName().isEmpty())
+					userU.setFirstName(user.getFirstName());
+				if (userU.getLastName().isEmpty())
+					userU.setLastName(user.getLastName());
+				userU.setCreationDate(user.getCreationDate());
+				userU.setModifiedAt(new Date());
+				UserModel retVal = userRepository.save(userU);
+				UserResource resource = new UserResource(retVal);
+				return resource;
+			} else {
+				throw new CustomException("user not found", HttpStatus.NOT_FOUND);
+			}
 		} catch (Exception e) {
 			throw new CustomException(e.getMessage().toString(), HttpStatus.NOT_MODIFIED);
 		}

@@ -12,6 +12,9 @@ import org.springframework.stereotype.Repository;
 public interface ProjectRepository extends JpaRepository<ProjectModel, Integer> {
     
     @Query(value = "SELECT p FROM ProjectModel p JOIN p.owner u WHERE u.id = ?1")
-    List<ProjectModel> getProjectsByUserId (Integer id);
+    List<ProjectModel> getAllProjectsByUserId (Integer id);
+
+    @Query(value = "SELECT p FROM ProjectModel p JOIN p.owner u WHERE u.id = ?1 and p.id = ?2")
+    ProjectModel getProjectByUserId(Integer userId, Integer projectId);
 
 }

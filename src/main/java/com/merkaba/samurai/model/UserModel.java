@@ -59,7 +59,6 @@ public class UserModel {
 
 	public UserModel() {
 		super();
-		this.creationDate = new Date();
 	}
 	
 	public UserModel(Integer id, String userName, String password, String firstName, String lastName) {
@@ -69,7 +68,6 @@ public class UserModel {
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.creationDate = new Date();
 	}
 
 	/* =================== *

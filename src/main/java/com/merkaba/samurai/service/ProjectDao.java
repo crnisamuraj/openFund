@@ -70,12 +70,23 @@ public class ProjectDao {
         }
     }
 
-    public List<ProjectModel> getProjectsByUserId (Integer id) {
-        List<ProjectModel> projects = projectRepository.getProjectsByUserId(id);
+    public List<ProjectModel> getAllProjectsByUserId (Integer id) {
+        List<ProjectModel> projects = projectRepository.getAllProjectsByUserId(id);
         if (projects.isEmpty()) {
             throw new CustomException("no projects found", HttpStatus.NOT_FOUND);
         }
         return projects;
+    }
+
+    public ProjectModel getProjectByUserId (Integer userId, Integer projectId) {
+        try {
+            ProjectModel project = projectRepository.getProjectByUserId(userId, projectId);
+            return project;
+        } catch(Exception e) {
+            throw new CustomException("no projects found", HttpStatus.NOT_FOUND);
+        }
+        
+
     }
 
 

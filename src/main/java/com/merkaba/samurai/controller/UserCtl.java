@@ -63,9 +63,9 @@ public class UserCtl {
 		return ResponseEntity.created(location).body(resource);
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, path="/{user_id}", produces="application/json")
-	public ResponseEntity<?> updateUser(@PathVariable Integer user_id, UserModel user) {
-		UserResource resource = userService.update(user_id, user);
+	@RequestMapping(method=RequestMethod.PUT, path="/{userId}", produces="application/json")
+	public ResponseEntity<?> updateUser(@PathVariable Integer userId, @RequestBody UserModel user) {
+		UserResource resource = userService.update(userId, user);
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
@@ -74,9 +74,15 @@ public class UserCtl {
 	}
 
 	@RequestMapping(path="/{userId}/project", method=RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<?> getProjectsByUserId(@PathVariable Integer userId) {
-		List<ProjectModel> projects = projectService.getProjectsByUserId(userId);
+	public ResponseEntity<?> getAllProjectsByUserId(@PathVariable Integer userId) {
+		List<ProjectModel> projects = projectService.getAllProjectsByUserId(userId);
 		return new ResponseEntity<>(projects, HttpStatus.OK);
+	}
+
+	@RequestMapping(path = "/{userId}/project/{projectId}", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<?> getProjectByUserId(@PathVariable Integer userId, @PathVariable Integer projectId) {
+		ProjectModel project = projectService.getProjectByUserId(userId, projectId);
+		return new ResponseEntity<>(project, HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/{userId}/project", method = RequestMethod.POST, produces = "application/json")
