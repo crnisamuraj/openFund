@@ -86,7 +86,7 @@ public class UserCtl {
 	}
 	
 	@RequestMapping(path = "/{userId}/project", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<?> addProject(@PathVariable Integer userId, ProjectModel project) {
+	public ResponseEntity<?> addProject(@PathVariable Integer userId, @RequestBody ProjectModel project) {
 		ProjectModel retVal = projectService.add(userId, project);
 		return new ResponseEntity<>(retVal, HttpStatus.CREATED);
 	}
