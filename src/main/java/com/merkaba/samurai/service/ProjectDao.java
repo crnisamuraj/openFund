@@ -62,6 +62,9 @@ public class ProjectDao {
 
     public ProjectModel update(Integer userId, Integer projectId, ProjectModel projectU) {
         try {
+            projectU.setId(projectId);
+            Optional<UserModel> userO = userRepository.findById(userId);
+            UserModel user = userO.get();
             ProjectModel project = projectRepository.getProjectByUserId(userId, projectId);
             if (projectU.getName().isEmpty()) {
                 projectU.setName(project.getName());
@@ -73,6 +76,7 @@ public class ProjectDao {
                 projectU.setEndDate(project.getEndDate());
             }
             projectU.setCreationDate(project.getCreationDate());
+            projectU.setOwner(user);
             ProjectModel retVal = projectRepository.save(projectU);
             return retVal;
         } catch (Exception e) {
