@@ -1,5 +1,6 @@
 package com.merkaba.samurai.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,9 +61,19 @@ public class ProjectDao {
         }
     }
 
-    public ProjectModel update(Integer id, ProjectModel projectU) {
+    public ProjectModel update(Integer userId, Integer projectId, ProjectModel projectU) {
         try {
-            projectU.setId(id);
+            ProjectModel project = projectRepository.getProjectByUserId(userId, projectId);
+            if (projectU.getName().isEmpty()) {
+                projectU.setName(project.getName());
+            }
+            if (projectU.getDescription().isEmpty()) {
+                projectU.setDescription(project.getDescription());
+            }
+            if (projectU.getEndDate().toString().isEmpty()) {
+                projectU.setEndDate(project.getEndDate());
+            }
+            projectU.setCreationDate(project.getCreationDate());
             ProjectModel retVal = projectRepository.save(projectU);
             return retVal;
         } catch (Exception e) {

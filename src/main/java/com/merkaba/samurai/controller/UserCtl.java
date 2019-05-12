@@ -63,7 +63,7 @@ public class UserCtl {
 		return ResponseEntity.created(location).body(resource);
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, path="/{userId}", produces="application/json")
+	@RequestMapping(method=RequestMethod.PATCH, path="/{userId}", produces="application/json")
 	public ResponseEntity<?> updateUser(@PathVariable Integer userId, @RequestBody UserModel user) {
 		UserResource resource = userService.update(userId, user);
 		URI location = ServletUriComponentsBuilder
@@ -89,6 +89,12 @@ public class UserCtl {
 	public ResponseEntity<?> addProject(@PathVariable Integer userId, @RequestBody ProjectModel project) {
 		ProjectModel retVal = projectService.add(userId, project);
 		return new ResponseEntity<>(retVal, HttpStatus.CREATED);
+	}
+
+	@RequestMapping(path = "/{userId}/project/{projectId}", method = RequestMethod.PATCH, produces = "application/json")
+	public ResponseEntity<?> updateProject(@PathVariable Integer userId, @PathVariable Integer projectId, @RequestBody ProjectModel projectU) {
+		ProjectModel project = projectService.update(userId, projectId, projectU);
+		return new ResponseEntity<>(project, HttpStatus.OK);
 	}
 	
 
