@@ -37,7 +37,7 @@ public class ProjectModel {
     private UserModel owner;
 
     @Temporal(TemporalType.DATE)
-    //@CreatedDate
+    @CreatedDate
     private Date creationDate;
 
     @Temporal(TemporalType.DATE)
