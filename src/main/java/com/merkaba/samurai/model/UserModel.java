@@ -1,13 +1,17 @@
 package com.merkaba.samurai.model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -16,20 +20,24 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.merkaba.samurai.model.DateAudit;
 
 import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name="User")
-@EntityListeners(AuditingEntityListener.class)
-public class UserModel {
+public class UserModel extends DateAudit{
+
 
 	/* =================== *
 	 * === Properties  === *
 	 * =================== */
+
+
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private Integer id;
@@ -50,6 +58,12 @@ public class UserModel {
 	
 	private String lastName;
 
+	@ManyToMany
+	@JoinTable(name = "user_roles",
+		joinColumns = @JoinColumn(name = "user_id"),
+		inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
+
 	@OneToMany(mappedBy = "owner")
 	@JsonManagedReference
 	private List<ProjectModel> projects;
@@ -57,37 +71,41 @@ public class UserModel {
 	@OneToMany(mappedBy = "user")
 	private List<DonationModel> donations;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
     @CreatedDate
 	private Date creationDate;
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@LastModifiedDate
 	private Date modifiedAt;
+
 
 	/* =================== *
 	 * === Constructor === *
 	 * =================== */
 
+
 	public UserModel() {
-		super();
+
 	}
 	
-	public UserModel(Integer id, String userName, String password, String firstName, String lastName) {
+	public UserModel(String userName, String password, String email, String firstName, String lastName) {
 		super();
-		this.id = id;
 		this.userName = userName;
 		this.password = password;
+		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
+
 
 	/* =================== *
 	 * Getters and Setters *
 	 * =================== */
 	
+
 	public Integer getId() {
-		return id;
+		return this.id;
 	}
 
 	public void setId(Integer id) {
@@ -95,7 +113,7 @@ public class UserModel {
 	}
 
 	public String getUserName() {
-		return userName;
+		return this.userName;
 	}
 
 	public void setUserName(String userName) {
@@ -103,15 +121,23 @@ public class UserModel {
 	}
 
 	public String getPassword() {
-		return password;
+		return this.password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	public String getEmail() {
+		return this.email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public String getFirstName() {
-		return firstName;
+		return this.firstName;
 	}
 
 	public void setFirstName(String firstName) {
@@ -119,30 +145,20 @@ public class UserModel {
 	}
 
 	public String getLastName() {
-		return lastName;
+		return this.lastName;
 	}
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
-	public Date getCreationDate() {
-		return creationDate;
+	public Set<Role> getRoles() {
+		return this.roles;
 	}
 
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
-
-	
-	public Date getModifiedAt() {
-		return modifiedAt;
-	}
-
-	public void setModifiedAt(Date modifiedAt) {
-		this.modifiedAt = modifiedAt;
-	}
-
 
 	public List<ProjectModel> getProjects() {
 		return this.projects;
@@ -152,13 +168,31 @@ public class UserModel {
 		this.projects = projects;
 	}
 
-	@Override
-	public String toString() {
-		return "UserModel [creationDate=" + creationDate + ", firstName=" + firstName + ", id=" + id + ", lastName="
-				+ lastName + ", modifiedAt=" + modifiedAt + ", password=" + password + ", projects=" + projects
-				+ ", userName=" + userName + "]";
+	public List<DonationModel> getDonations() {
+		return this.donations;
 	}
 
-	
+	public void setDonations(List<DonationModel> donations) {
+		this.donations = donations;
+	}
+
+	public Date getCreationDate() {
+		return this.creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public Date getModifiedAt() {
+		return this.modifiedAt;
+	}
+
+	public void setModifiedAt(Date modifiedAt) {
+		this.modifiedAt = modifiedAt;
+	}
+
+
+
 	
 }
