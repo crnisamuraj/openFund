@@ -3,6 +3,7 @@ package com.merkaba.samurai.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -11,10 +12,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import org.hibernate.annotations.NaturalId;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -31,11 +34,17 @@ public class UserModel {
 	@GeneratedValue
 	private Integer id;
 	
+	@NaturalId
+	@Column(unique = true)
 	@NotNull(message="User Name cannot be empty")
 	private String userName;
 	
 	@NotNull(message="Password cannot be empty")
 	private String password;
+
+	@Email
+	@Column(unique = true)
+	private String email;
 	
 	private String firstName;
 	
