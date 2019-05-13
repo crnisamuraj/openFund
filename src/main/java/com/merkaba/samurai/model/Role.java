@@ -19,14 +19,14 @@ public class Role {
 
     @NaturalId
     @Enumerated(EnumType.STRING)
-    private RoleName role;
+    private RoleName name;
 
     public Role() {
 
     }
 
-    public Role(RoleName role) {
-        this.role = role;
+    public Role(RoleName name) {
+        this.name = name;
     }
 
     /**
@@ -44,17 +44,17 @@ public class Role {
     }
 
     /**
-     * @return the role
+     * @return the name
      */
-    public RoleName getRole() {
-        return role;
+    public RoleName getName() {
+        return name;
     }
 
     /**
-     * @param role the role to set
+     * @param name the name to set
      */
-    public void setRole(RoleName role) {
-        this.role = role;
+    public void setRole(RoleName name) {
+        this.name = name;
     }
 
     
