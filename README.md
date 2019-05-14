@@ -1,4 +1,4 @@
-# SpringBootBilerplate
+# SpringBootBoilerplate
 
 Spring Boot 2 boilerplate
 
