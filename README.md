@@ -7,8 +7,8 @@ Dependencies:
 * SpringBoot 2.1.4
 * Java 11
 * Maven
-* Web
+* SpringWeb
 * MySQL
-* H2
-* JPA
-* DevTools
+* SpringJPA
+* SpringDevTools
+* SpringSecurity
